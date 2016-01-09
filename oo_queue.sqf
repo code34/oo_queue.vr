@@ -21,17 +21,66 @@
 	#include "oop.h"
 
 	CLASS("OO_QUEUE")
-		PRIVATE VARIABLE("string","myvariable");
+		PRIVATE VARIABLE("array","queue");
 
 		PUBLIC FUNCTION("string","constructor") { 
-
+			_array = [];
+			MEMBER("queue", _array);
 		};
 
-		PUBLIC FUNCTION("string","setMyVariable") {
+		/*
+		Get queue
+		*/
+		PUBLIC FUNCTION("", "getQueue") {
+			MEMBER("queue", nil);
+		};
 
+		/*
+		Get the first element with priority prior in the queue
+		 params - array 
+		 1- priority queue
+		*/
+		PUBLIC FUNCTION("scalar","get") {
+			private ["_array", "_queue", "_queueid", "_element"];
+
+			_queueid = _this;
+			_queue = MEMBER("queue", nil) select _queueid;
+
+			_element = "";
+			if(count(_queue) > 0) then {
+				_element = _queue deleteat 0;
+			};
+			
+			MEMBER("queue", nil) set [_queueid, _queue];
+			_element;
+		};
+
+		/*
+		Add an element with priority in the right queue
+		 params - array 
+		 1- priority queue
+		 2 - element
+		*/
+		PUBLIC FUNCTION("array","put") {
+			private ["_queueid", "_element", "_queue"];
+			
+			_queueid = _this select 0;
+			_element = _this select 1;
+
+			if (count MEMBER("queue", nil)  < _queueid) then {
+				_queue = [];
+			} else {
+				_queue = MEMBER("queue", nil)  select _queueid;
+				if(isnil "_queue") then {
+					_queue = [];
+				};
+			};			
+			_queue = _queue + [_element];
+
+			MEMBER("queue", nil) set [_queueid, _queue];
 		};
 
 		PUBLIC FUNCTION("","deconstructor") { 
-			DELETE_VARIABLE("myvariable");
+			DELETE_VARIABLE("queue");
 		};
 	ENDCLASS;
