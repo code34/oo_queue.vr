@@ -36,17 +36,64 @@
 		};
 
 		/*
+		Get priority element in the queue
+		Return default return value
+		*/
+		PUBLIC FUNCTION("ANY", "getNextPrior") {
+			private ["_index", "_result", "_defaultreturn", "_array"];
+			
+			if(isnil "_this") exitwith { hintc "OO_QUEUE: getNextPrior requires a return default value";};
+			_defaultreturn = _this;
+
+			{
+				scopeName "oo_queue";
+				if!(isnil "_x") then {
+					If(count _x > 0) then {
+						_index = _foreachindex;
+						breakout "oo_queue";
+					};
+				};
+				sleep 0.0001;
+			} foreach MEMBER("queue", nil);
+			if(isnil "_index") then {
+				_result = _defaultreturn;
+			} else {
+				_array = [_index, _defaultreturn];
+				_result = MEMBER("get", _array);
+			};
+			_result;
+		};
+
+		/*
+		Retrieve the number of elements in the Queue
+		*/
+		PUBLIC FUNCTION("", "count") {
+			private ["_count"];
+
+			_count = 0;
+			{
+				if!(isnil "_x") then {
+					_count = _count + count(_x);
+				};
+				sleep 0.0001;
+			} foreach MEMBER("queue", nil);
+			_count;
+		};
+
+		/*
 		Get the first element with priority prior in the queue
 		 params - array 
 		 1- priority queue
 		*/
-		PUBLIC FUNCTION("scalar","get") {
-			private ["_array", "_queue", "_queueid", "_element"];
+		PUBLIC FUNCTION("array","get") {
+			private ["_array", "_queue", "_queueid", "_element", "_defaultreturn"];
 
-			_queueid = _this;
+			_queueid = _this select 0;
+			_defaultreturn = _this select 1;
+
 			_queue = MEMBER("queue", nil) select _queueid;
 
-			_element = "";
+			_element = _defaultreturn;
 			if(count(_queue) > 0) then {
 				_element = _queue deleteat 0;
 			};
