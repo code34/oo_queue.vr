@@ -20,7 +20,7 @@
 
 	#include "oop.h"
 
-	CLASS("OO_TEMPLATE")
+	CLASS("OO_QUEUE")
 		PRIVATE VARIABLE("string","myvariable");
 
 		PUBLIC FUNCTION("string","constructor") { 
