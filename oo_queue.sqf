@@ -24,8 +24,7 @@
 		PRIVATE VARIABLE("array","queue");
 
 		PUBLIC FUNCTION("string","constructor") { 
-			_array = [];
-			MEMBER("queue", _array);
+			MEMBER("clearQueue", nil);
 		};
 
 		/*
@@ -33,6 +32,14 @@
 		*/
 		PUBLIC FUNCTION("", "getQueue") {
 			MEMBER("queue", nil);
+		};
+
+		/*
+		Clear the queue
+		*/
+		PUBLIC FUNCTION("", "clearQueue") {
+			_array = [];
+			MEMBER("queue", _array);
 		};
 
 		/*
