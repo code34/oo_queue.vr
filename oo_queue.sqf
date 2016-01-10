@@ -28,14 +28,16 @@
 		};
 
 		/*
-		Get queue
+		Return an array containing all the elements of the queue
+		Return : array
 		*/
-		PUBLIC FUNCTION("", "getQueue") {
+		PUBLIC FUNCTION("", "toArray") {
 			MEMBER("queue", nil);
 		};
 
 		/*
-		Clear the queue
+		Removes all of the elements from this priority queue
+		Return : nothing
 		*/
 		PUBLIC FUNCTION("", "clearQueue") {
 			_array = [];
@@ -43,13 +45,22 @@
 		};
 
 		/*
-		Get priority element in the queue
-		Return default return value
+		Test if the priority queue is empty 
+		Return : boolean 
 		*/
-		PUBLIC FUNCTION("ANY", "getNextPrior") {
+		PUBLIC FUNCTION("", "isEmpty") {
+			if(MEMBER("count", nil) > 0) then { false; } else { true;};
+		};
+
+		/*
+		Get next first in element according its priority, and remove it
+		Param : default return value, if queue is empty
+		Return : default return value
+		*/
+		PUBLIC FUNCTION("ANY", "remove") {
 			private ["_index", "_result", "_defaultreturn", "_array"];
 			
-			if(isnil "_this") exitwith { hintc "OO_QUEUE: getNextPrior requires a return default value";};
+			if(isnil "_this") exitwith { diag_log "OO_QUEUE: getNextPrior requires a return default value";};
 			_defaultreturn = _this;
 
 			{
@@ -72,7 +83,8 @@
 		};
 
 		/*
-		Retrieve the number of elements in the Queue
+		Count the number of elements in the Queue
+		Return : scalar
 		*/
 		PUBLIC FUNCTION("", "count") {
 			private ["_count"];
@@ -88,11 +100,13 @@
 		};
 
 		/*
-		Get the first element with priority prior in the queue
-		 params - array 
-		 1- priority queue
+		Get the first in element, and remove it, according its priority
+		 params : array 
+		 	1- priority - (0 highest priority)
+		 	2 - default return
+		 Return : default return
 		*/
-		PUBLIC FUNCTION("array","get") {
+		PRIVATE FUNCTION("array","get") {
 			private ["_array", "_queue", "_queueid", "_element", "_defaultreturn"];
 
 			_queueid = _this select 0;
@@ -110,12 +124,12 @@
 		};
 
 		/*
-		Add an element with priority in the right queue
-		 params - array 
-		 1- priority queue
-		 2 - element
+		Insert an element in priority queue according its priority
+		 params : array
+		 	1 - priority - (0 highest priority)
+		 	2 - Element to insert in the queue
 		*/
-		PUBLIC FUNCTION("array","put") {
+		PUBLIC FUNCTION("array","insert") {
 			private ["_queueid", "_element", "_queue"];
 			
 			_queueid = _this select 0;
