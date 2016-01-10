@@ -36,6 +36,23 @@
 		};
 
 		/*
+		Count the number of elements in the Queue
+		Return : scalar
+		*/
+		PUBLIC FUNCTION("", "count") {
+			private ["_count"];
+
+			_count = 0;
+			{
+				if!(isnil "_x") then {
+					_count = _count + count(_x);
+				};
+				sleep 0.0001;
+			} foreach MEMBER("queue", nil);
+			_count;
+		};
+
+		/*
 		Removes all of the elements from this priority queue
 		Return : nothing
 		*/
@@ -83,23 +100,6 @@
 		};
 
 		/*
-		Count the number of elements in the Queue
-		Return : scalar
-		*/
-		PUBLIC FUNCTION("", "count") {
-			private ["_count"];
-
-			_count = 0;
-			{
-				if!(isnil "_x") then {
-					_count = _count + count(_x);
-				};
-				sleep 0.0001;
-			} foreach MEMBER("queue", nil);
-			_count;
-		};
-
-		/*
 		Get the first in element, and remove it, according its priority
 		 params : array 
 		 	1- priority - (0 highest priority)
@@ -135,6 +135,8 @@
 			_queueid = _this select 0;
 			_element = _this select 1;
 
+			if(typename _queueid != "SCALAR") exitwith {false;};
+
 			if (count MEMBER("queue", nil)  < _queueid) then {
 				_queue = [];
 			} else {
@@ -146,6 +148,7 @@
 			_queue = _queue + [_element];
 
 			MEMBER("queue", nil) set [_queueid, _queue];
+			true;
 		};
 
 		PUBLIC FUNCTION("","deconstructor") { 
