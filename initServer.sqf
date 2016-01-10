@@ -2,35 +2,24 @@
 
 		 _queue = ["new", ""] call OO_QUEUE;
 
-		["put", [1, "ANTOINE"]] call _queue;
-		["put", [2, "JP"]] call _queue;
-		["put", [2, "MIMI"]] call _queue;
-		["put", [3, "NICOLAS"]] call _queue;
-		["put", [3, "SOPHIE"]] call _queue;
-		["put", [4, "ELIOT"]] call _queue;
-		["put", [5, "JULIE"]] call _queue;
+		["insert", [4, "JOHN"]] call _queue;	
+		["insert", [4, "OLIVIER"]] call _queue;
+		["insert", [3, "NICOLAS"]] call _queue;
+		["insert", [3, "SOPHIE"]] call _queue;
+		["insert", [1, "ANTOINE"]] call _queue;
+		["insert", [2, "JP"]] call _queue;
+		["insert", [2, "MIMI"]] call _queue;
+		["insert", [6, "DARKVADOR"]] call _queue;
 
-		sleep 1;
+		sleep 2;
+		
+		while { !("isEmpty" call _queue) } do {
+			hint format ["next element : %1",  ["remove", ""] call _queue];
+			sleep 1;
+		};
 
-		hintc format ["pomme: %1", ["get", 1] call _queue];
+		hint "empty!";
 
-		sleep 5;
-
-		hintc format ["cerise: %1", ["get", 3] call _queue];
-
-		sleep 5;
-
-		hintc format ["carotte: %1", ["get", 2] call _queue];
-
-		sleep 5;
-
-		hintc format ["inconu pomme: %1", ["get", 1] call _queue];
-
-		sleep 5;
-
-		hintc format ["file attente: %1", "getQueue" call _queue];
-
-		 //["delete", _queue] call OO_QUEUE;
 
 
 	
