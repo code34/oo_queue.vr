@@ -19,11 +19,67 @@
 
 	--------------------------------------------------------------------------------------------------------------
 
-	Function:  _template = ["new", ""] call OO_TEMPLATE;
-	Create a new template object
+	Function:  _queue = ["new", ""] call OO_QUEUE;
+	Create a new Priority queue object
 		
-	Parameters: 
-		string 
+	Parameters: nothing
+	Return : _queue : OO_QUEUE object
+
+	--------------------------------------------------------------------------------------------------------------
+
+	Function: _array = "toArray" call _queue;
+	Return an array containing all the elements of the queue
+		
+	Parameters: nothing
+	Return : _array : array
+
+	--------------------------------------------------------------------------------------------------------------
+
+	Function: "clearQueue" call _queue;
+	Removes all of the elements from this priority queue
+		
+	Parameters: nothing
+	Return : nothing
+
+	--------------------------------------------------------------------------------------------------------------
+
+	Function: _bool = "isEmpty" call _queue;
+	Test if the priority queue is empty
+		
+	Parameters: nothing
+	Return : _bool : boolean
+
+	--------------------------------------------------------------------------------------------------------------
+
+	Function: _count = "count" call _queue;
+	Count the number of elements in the Queue
+		
+	Parameters: nothing
+	Return : _count : scalar
+
+	--------------------------------------------------------------------------------------------------------------
+
+	Function: _element = ["remove", ANY] call _queue;
+	Get next first in element according its priority, and remove it
+	
+	Parameters : 
+		default return value, if queue is empty
+		can be ANY type (ex: STRING, SCALAR, ARRAY, OBJECT, etc)
+	
+	Return : 
+		element : according the type of element in the queue
+		or if queue is empty : default return value (according parameters)
+
+	--------------------------------------------------------------------------------------------------------------
+
+	Function: _bool = ["insert", _array] call _queue;
+	Insert an element in priority queue according its priority
+	
+	Parameters : _array 
+		1 - priority - (0 highest priority) - scalar
+	 	2 - Element to insert in the queue - can be ANY type (ex: STRING, SCALAR, ARRAY, OBJECT, etc)
+	
+	Return : boolean, if success
 
 	--------------------------------------------------------------------------------------------------------------
 	
