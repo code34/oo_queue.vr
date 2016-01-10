@@ -59,7 +59,7 @@
 
 	--------------------------------------------------------------------------------------------------------------
 
-	Function: _element = ["remove", ANY] call _queue;
+	Function: _element = ["get", ANY] call _queue;
 	Get next first in element according its priority, and remove it
 	
 	Parameters : 
@@ -72,10 +72,10 @@
 
 	--------------------------------------------------------------------------------------------------------------
 
-	Function: _bool = ["insert", _array] call _queue;
+	Function: _bool = ["put", _array] call _queue;
 	Insert an element in priority queue according its priority
 	
-	Parameters : _array 
+	Parameters : _array : [_priority, _element]
 		1 - priority - (0 highest priority) - scalar
 	 	2 - Element to insert in the queue - can be ANY type (ex: STRING, SCALAR, ARRAY, OBJECT, etc)
 	

@@ -74,7 +74,7 @@
 		Param : default return value, if queue is empty
 		Return : default return value
 		*/
-		PUBLIC FUNCTION("ANY", "remove") {
+		PUBLIC FUNCTION("ANY", "get") {
 			private ["_index", "_result", "_defaultreturn", "_array"];
 			
 			if(isnil "_this") exitwith { diag_log "OO_QUEUE: getNextPrior requires a return default value";};
@@ -94,7 +94,7 @@
 				_result = _defaultreturn;
 			} else {
 				_array = [_index, _defaultreturn];
-				_result = MEMBER("get", _array);
+				_result = MEMBER("getInQueue", _array);
 			};
 			_result;
 		};
@@ -106,7 +106,7 @@
 		 	2 - default return
 		 Return : default return
 		*/
-		PRIVATE FUNCTION("array","get") {
+		PRIVATE FUNCTION("array","getInQueue") {
 			private ["_array", "_queue", "_queueid", "_element", "_defaultreturn"];
 
 			_queueid = _this select 0;
@@ -129,7 +129,7 @@
 		 	1 - priority - (0 highest priority)
 		 	2 - Element to insert in the queue
 		*/
-		PUBLIC FUNCTION("array","insert") {
+		PUBLIC FUNCTION("array","put") {
 			private ["_queueid", "_element", "_queue"];
 			
 			_queueid = _this select 0;
