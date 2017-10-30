@@ -14,7 +14,7 @@
 		sleep 2;
 		
 		while { !("isEmpty" call _queue) } do {
-			hint format ["next element : %1",  ["get", ""] call _queue];
+			hint format ["next element : %1 count %2",  ["get", ""] call _queue, "count" call _queue];
 			sleep 1;
 		};
 

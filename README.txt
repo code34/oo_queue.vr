@@ -1,6 +1,6 @@
 	/*
 	Author: code34 nicolas_boiteux@yahoo.fr
-	Copyright (C) 2016 Nicolas BOITEUX
+	Copyright (C) 2016-2018 Nicolas BOITEUX
 
 	CLASS OO_QUEUE
 	
@@ -31,6 +31,7 @@
 	You can share, modify, distribute this script but don't remove the licence and the name of the original author
 
 	logs:
+		0.2	- private keyword, performance improvement
 		0.1 	- OO QUEUE - first release
 
 
