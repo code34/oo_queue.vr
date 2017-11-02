@@ -1,4 +1,4 @@
-﻿		call compilefinal preprocessFileLineNumbers "oo_queue.sqf";
+﻿		call compile preprocessFileLineNumbers "oo_queue.sqf";
 
 		 _queue = ["new", ""] call OO_QUEUE;
 
