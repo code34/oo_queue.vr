@@ -2,6 +2,7 @@
 
 		 _queue = ["new", ""] call OO_QUEUE;
 
+		 ["toArray"] call _queue;
 		["put", [4, "JOHN"]] call _queue;	
 		["put", [4, "OLIVIER"]] call _queue;
 		["put", [3, "NICOLAS"]] call _queue;
