@@ -52,6 +52,7 @@
 		PUBLIC FUNCTION("", "clearQueue") {
 			DEBUG(#, "OO_QUEUE::clearQueue")
 			MEMBER("queue", []);
+			MEMBER("counter", 0);
 		};
 
 		/*
@@ -90,5 +91,6 @@
 		PUBLIC FUNCTION("","deconstructor") { 
 			DEBUG(#, "OO_QUEUE::deconstructor")
 			DELETE_VARIABLE("queue");
+			DELETE_VARIABLE("counter");
 		};
 	ENDCLASS;
