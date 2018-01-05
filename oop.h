@@ -1,94 +1,22 @@
 /*
-	This file is part of RBS (Realistic Battleground Simulator).
 
-	Copyright © 2013 RBS Development Team.
-	All rights reserved.
+Author: code34 <nicolas_boiteux@yahoo.fr>
+Author: Naught <dylanplecki@gmail.com>
 
-	RBS is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+Copyright (C) 2013-2018 Nicolas BOITEUX
 
-	RBS is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+	
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-//////////////////////////////////////////////////////////////
-//
-//	Title: RBS Object Oriented SQF Scripting
-//	----------------------------------------
-//	File: oop.h
-//	Author: Naught <dylanplecki@gmail.com>
-//	Version: 1.3.1
-//
-//	Description:
-//	Contains preprocessor definitions and macros for designing
-//	and implementing object oriented code into the SQF
-//	scripting language. Uses global variables.
-//
-//	Note:
-//	All API documentation can be found below in the
-//	<Interactive (API) Macros and Definitions> group.
-//
-//////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////
-//  Group: Examples
-//////////////////////////////////////////////////////////////
-
-/*
-	Example:
-	The simple class below will be compiled into fully-functional SQF code:
-	
-	(start code)
-	
-	#include "oop.h"
-	
-	CLASS("PlayerInfo")
-		PRIVATE STATIC_VARIABLE("scalar","unitCount");
-		PRIVATE VARIABLE("object","currentUnit");
-		PUBLIC FUNCTION("object","constructor") {
-			MEMBER("currentUnit",_this);
-			private ["_unitCount"];
-			_unitCount = MEMBER("unitCount",nil);
-			if (isNil "_unitCount") then {_unitCount = 0};
-			_unitCount = _unitCount + 1;
-			MEMBER("unitCount",_unitCount);
-		};
-		PUBLIC FUNCTION("","getUnit") FUNC_GETVAR("currentUnit");
-		PUBLIC FUNCTION("","setUnit") {
-			MEMBER("currentUnit",_this);
-		};
-		PUBLIC FUNCTION("string","deconstructor") {
-			DELETE_VARIABLE("currentUnit");
-			private ["_unitCount"];
-			_unitCount = MEMBER("unitCount",nil);
-			_unitCount = _unitCount - 1;
-			MEMBER("unitCount",_unitCount);
-			hint _this;
-		};
-	ENDCLASS;
-	
-	(end)
-	
-	SQF class interaction:
-	
-	(start code)
-	
-	_playerInfo = ["new", player1] call PlayerInfo;
-	_currentUnit = "getUnit" call _playerInfo;
-	["setUnit", player2] call _playerInfo;
-	["delete", _playerInfo, "Player Removed!"] call PlayerInfo;
-	_playerInfo = nil;
-	
-	(end)
-	
-	Note: Both the constructor and deconstructor must be public.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 */
 
 //////////////////////////////////////////////////////////////
@@ -129,8 +57,13 @@
 #define CALLCLASS(className,member,args,access) ([_classID, member, SAFE_VAR(args), access] call GETCLASS(className))
 
 #define VAR_DFT_FUNC(varName) {if (isNil "_this") then {NAMESPACE getVariable [GETVAR(varName), nil]} else {NAMESPACE setVariable [GETVAR(varName), _this]};}
+#define UIVAR_DFT_FUNC(varName) {if (isNil "_this") then {UINAMESPACE getVariable [GETVAR(varName), nil]} else {UINAMESPACE setVariable [GETVAR(varName), _this]};}
+
 #define SVAR_DFT_FUNC(varName) {if (isNil "_this") then {NAMESPACE getVariable [GETSVAR(varName), nil]} else {NAMESPACE setVariable [GETSVAR(varName), _this]};}
+#define SUIVAR_DFT_FUNC(varName) {if (isNil "_this") then {UINAMESPACE getVariable [GETSVAR(varName), nil]} else {UINAMESPACE setVariable [GETSVAR(varName), _this]};}
+
 #define VAR_DELETE(varName) (NAMESPACE setVariable [GETVAR(varName), nil])
+#define UIVAR_DELETE(varName) (UINAMESPACE setVariable [GETVAR(varName), nil])
 
 #define MOD_VAR(varName,mod) MEMBER(varName,MEMBER(varName,nil)+mod); 
 #define INC_VAR(varName) MOD_VAR(varName,1)
@@ -140,35 +73,6 @@
 
 #define GET_AUTO_INC(className) (NAMESPACE getVariable [AUTO_INC_VAR(className),0])
 
-#define INSTANTIATE_CLASS(className) \
-	NAMESPACE setVariable [className, { \
-	CHECK_THIS; \
-	if ((count _this) > 0) then { \
-		private _class = className; \
-		if (isNil {_this select 0}) then {_this set [0,_class]}; \
-		switch (_this select 0) do { \
-		case "new": { \
-			NAMESPACE setVariable [AUTO_INC_VAR(className), (GET_AUTO_INC(className) + 1)]; \
-			private _code = compile format ['CHECK_THIS; ENSURE_INDEX(1,nil); (["%1", (_this select 0), (_this select 1), 0]) call GETCLASS(className);', (className + "_" + str(GET_AUTO_INC(className)))]; \
-			ENSURE_INDEX(1,nil); \
-			NAMESPACE setVariable [format['%1_%2_code', className, GET_AUTO_INC(className)], _code];\
-			[CONSTRUCTOR_METHOD, (_this select 1)] call _code; \
-			_code; \
-		}; \
-		case "delete": { \
-			if ((count _this) == 2) then {_this set [2,nil]}; \
-			[DECONSTRUCTOR_METHOD, (_this select 2)] call (_this select 1); \
-		}; \
-		default { \
-			private _classID = _this select 0; \
-			private _member = _this select 1; \
-			private _access = DEFAULT_PARAM(3,0); \
-			_this = DEFAULT_PARAM(2,nil); \
-			private _argType = if (isNil "_this") then {""} else {typeName _this}; \
-			private _self = NAMESPACE getvariable format["%1_code", _classID]; \
-			switch (true) do {
-			
-#define FINALIZE_CLASS };};};};}]
 
 //////////////////////////////////////////////////////////////
 //  Group: Interactive (API) Macros and Definitions
@@ -181,6 +85,10 @@
 */
 #ifndef NAMESPACE
 #define NAMESPACE missionNamespace
+#endif
+
+#ifndef UINAMESPACE
+#define UINAMESPACE uiNamespace
 #endif
 
 /*
@@ -259,7 +167,9 @@
 		<FUNCTION>
 */
 #define VARIABLE(typeStr,varName) CHECK_VAR(typeStr,varName)): VAR_DFT_FUNC(varName)
+#define UI_VARIABLE(typeStr,varName) CHECK_VAR(typeStr,varName)): UIVAR_DFT_FUNC(varName)
 #define STATIC_VARIABLE(typeStr,varName) CHECK_VAR(typeStr,varName)): SVAR_DFT_FUNC(varName)
+#define STATIC_UI_VARIABLE(typeStr,varName) CHECK_VAR(typeStr,varName)): SUIVAR_DFT_FUNC(varName)
 
 /*
 	Macro: DELETE_VARIABLE(varName)
@@ -273,6 +183,7 @@
 		<VARIABLE>
 */
 #define DELETE_VARIABLE(varName) VAR_DELETE(varName)
+#define DELETE_UI_VARIABLE(varName) UIVAR_DELETE(varName)
 
 /*
 	Macro: MEMBER(memberStr,args)
@@ -287,6 +198,24 @@
 		args - The arguments to be passed to the member function or variable [any].
 */
 #define MEMBER(memberStr,args) CALLCLASS(_class,memberStr,args,2)
+
+/*
+	Macro:  NEW(class, args)
+	Instanciate a new object of class with args 
+*/
+#define NEW(class, args) ["new", args] call class
+
+/*
+	Macro: DELETE(class, instance)
+	Delete the instance of object of class
+*/
+#define DELETE(instance) "deconstructor" call instance
+
+/*
+	Macro: STATIC_FUNCTION(class, fncName, args)
+	Call a static function name of class with args
+*/
+#define STATIC_FUNCTION(instance, fncName, args) ["static", [fncName, args]] call instance
 
 /*
 	Macro: FUNC_GETVAR(varName)
@@ -305,3 +234,43 @@
 	Ends a class's initializaton and finalizes SQF output.
 */
 #define ENDCLASS FINALIZE_CLASS
+
+#define INSTANTIATE_CLASS(className) \
+	NAMESPACE setVariable [className, { \
+	CHECK_THIS; \
+	if ((count _this) > 0) then { \
+		private _class = className; \
+		if (isNil {_this select 0}) then {_this set [0,_class]}; \
+		switch (_this select 0) do { \
+		case "new": { \
+			NAMESPACE setVariable [AUTO_INC_VAR(className), (GET_AUTO_INC(className) + 1)]; \
+			private _code = compile format ['CHECK_THIS; ENSURE_INDEX(1,nil); (["%1", (_this select 0), (_this select 1), 0]) call GETCLASS(className);', (className + "_" + str(GET_AUTO_INC(className)))]; \
+			ENSURE_INDEX(1,nil); \
+			private _classID = className + "_" + str(GET_AUTO_INC(className)); \
+			[_classID, "this", SAFE_VAR(_code), 2] call GETCLASS(className); \
+			[CONSTRUCTOR_METHOD, (_this select 1)] call _code; \
+			_code; \
+		}; \
+		case "static":{ \
+			private _code = compile format ['CHECK_THIS; ENSURE_INDEX(1,nil); (["%1", (_this select 0), (_this select 1), 0]) call GETCLASS(className);', className]; \
+			[(_this select 1) select 0, (_this select 1) select 1] call _code; \
+		}; \
+		case "protected":{ \
+			private _array = toArray str (missionNamespace getVariable className); \
+    			_array deleteAt (count _array - 1); \
+    			_array deleteAt (0); \
+    			missionNamespace setVariable[className, (compileFinal toString _array)]; \
+		}; \
+		case "delete": { \
+			if ((count _this) == 2) then {_this set [2,nil]}; \
+			[DECONSTRUCTOR_METHOD, (_this select 2)] call (_this select 1); \
+		}; \
+		default { \
+			private _classID = _this select 0; \
+			private _member = _this select 1; \
+			private _access = DEFAULT_PARAM(3,0); \
+			_this = DEFAULT_PARAM(2,nil); \
+			private _argType = if (isNil "_this") then {""} else {typeName _this}; \
+			switch (true) do { \
+			
+#define FINALIZE_CLASS };};};};}]
