@@ -31,6 +31,7 @@
 	You can share, modify, distribute this script but don't remove the licence and the name of the original author
 
 	logs:
+		0.3	- add unit tests, performance improvement - Killzone kid optimization
 		0.2	- private keyword, performance improvement
 		0.1 	- OO QUEUE - first release
 
