@@ -27,5 +27,6 @@
 		"clearQueue" call _queue;
 		_result = ["assert_equal", [_queue, "count",0, nil]] call _unittest;
 		_result = ["assert_equal", [_queue, "isEmpty",true, nil]] call _unittest;
+		_result = ["assert_equal", [_queue, "get", nil, nil]] call _unittest;
 
 		"dump" call _unittest;
