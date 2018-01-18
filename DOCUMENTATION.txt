@@ -59,16 +59,12 @@
 
 	--------------------------------------------------------------------------------------------------------------
 
-	Function: _element = ["get", ANY] call _queue;
+	Function: _element = "get"  call _queue;
 	Get next first in element according its priority, and remove it
-	
-	Parameters : 
-		default return value, if queue is empty
-		can be ANY type (ex: STRING, SCALAR, ARRAY, OBJECT, etc)
 	
 	Return : 
 		element : according the type of element in the queue
-		or if queue is empty : default return value (according parameters)
+		or if queue is empty : return nil
 
 	--------------------------------------------------------------------------------------------------------------
 
