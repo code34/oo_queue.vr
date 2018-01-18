@@ -34,7 +34,11 @@
 		Return an array containing all the elements of the queue
 		Return : array
 		*/
-		PUBLIC FUNCTION("", "toArray") FUNC_GETVAR("queue");
+		PUBLIC FUNCTION("", "toArray") {
+			private _array = [];
+			{ _array pushBack (_x select 2); true; } count MEMBER("queue", nil);
+			_array;
+		};
 
 		/*
 		Count the number of elements in the Queue
