@@ -73,7 +73,7 @@
 		Param : default return value, if queue is empty
 		Return : default return value
 		*/
-		PUBLIC FUNCTION("ANY", "get") {
+		PUBLIC FUNCTION("", "get") {
 			DEBUG(#, "OO_QUEUE::get")
 			(MEMBER("queue", nil) deleteAt 0) select 2;
 		};
